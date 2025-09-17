@@ -9,7 +9,7 @@ const FristCol = () => {
             <h3 className="font-semibold mb-3 text-sm bg-white border rounded shadow-sm p-2 w-full">Overall Compliance</h3>
 
 
-            <div className="bg-white border rounded shadow-sm p-4 max-w-md w-full">
+            <div className="bg-white border rounded shadow-sm p-4 w-full">
                 <div className="font-semibold mb-3 text-xl">SEE NOTE</div>
                 <div>
                     <p>Overall compliance is the avg of punch and shift compliance</p>

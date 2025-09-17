@@ -7,14 +7,14 @@ const SecondCol = () => {
 
             <h3 className="font-semibold mb-3 text-sm bg-white border rounded shadow-sm p-2 w-full">MySchedule Compliance</h3>
 
-            <div className="bg-white border rounded shadow-sm p-4 max-w-md w-full">
+            <div className="bg-white border rounded shadow-sm p-4 w-full">
                 <div className="font-semibold mb-3 text-xl">Manager</div>
                 <div className="text-xl font-bold">
                     97%
                 </div>
             </div>
 
-            <div className="bg-white border rounded shadow-sm p-4 max-w-md w-full mt-3">
+            <div className="bg-white border rounded shadow-sm p-4 w-full mt-3">
                 <div className="font-semibold mb-3 text-xl">Associate</div>
                 <div className="text-xl font-bold">
                     90.79%

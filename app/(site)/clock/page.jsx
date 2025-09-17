@@ -4,8 +4,8 @@ const Clock = () => {
     return (
         <main className="p-4 flex-1 overflow-auto space-y-6">
 
-            <div className="flex justify-between items-center">
-                <div className="flex items-center gap-5">
+            <div className="flex justify-between items-center gap-3">
+                <div className="flex items-center gap-4">
                     <span className="text-lg w-fit text-nowrap">Period:</span>
                     <input type="number" placeholder="3" className="border shadow-sm bg-gray-200 p-1 px-2 w-full text-lg rounded-sm" />
                 </div>

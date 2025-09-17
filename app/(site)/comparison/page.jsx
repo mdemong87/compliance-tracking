@@ -4,11 +4,12 @@ import { PiArrowsDownUpBold } from "react-icons/pi";
 
 const Clock = () => {
     return (
-        <main className="p-4 flex-1 overflow-auto space-y-6">
+        <main className="p-4 flex-1 overflow-auto space-y-6 z-40">
 
             <div className="bg-white border rounded shadow-sm overflow-x-auto">
-                <div className="px-3 py-2 border-b font-semibold text-sm flex justify-between items-center gap-5">
-                    <div className="flex items-center gap-2 w-full">
+                <div className="px-3 py-3 md:py-2 border-b font-semibold text-sm flex flex-col md:flex-row justify-between items-center gap-5">
+                    <div className="flex flex-row items-center gap-2 w-full">
+
                         <input type="date" placeholder="7290" className="border shadow-sm bg-gray-200 p-1 px-2 w-full text-lg rounded-sm cursor-pointer" />
 
 
@@ -21,7 +22,7 @@ const Clock = () => {
 
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between w-full md:w-fit gap-2">
                         <button
                             type="submit"
                             className="px-4 py-2 bg-blue-600 text-white rounded w-fit text-nowrap cursor-pointer"
