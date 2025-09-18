@@ -1,7 +1,7 @@
-import FristCol from "../componnent/FristCol";
-import PubID from "../componnent/PubID";
-import SecondCol from "../componnent/SecondCol";
-import TirdCol from "../componnent/TirdCol";
+import FristCol from "../../componnent/FristCol";
+import PubID from "../../componnent/PubID";
+import SecondCol from "../../componnent/SecondCol";
+import TirdCol from "../../componnent/TirdCol";
 
 export default function Homepage() {
   return (

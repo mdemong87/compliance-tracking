@@ -1,13 +1,17 @@
 'use client'
 
+import useNavIsOpenStore from "@/store/useNavIsOpenStore";
 import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import LogoutBtn from "./LogoutBtn";
 
 
 const Header = () => {
 
     const pathname = usePathname();
+    const { isOpen, setisOpen } = useNavIsOpenStore();
+
 
     return (
         <header className="h-14 bg-white border-b flex items-center justify-between px-4 sticky top-0 z-50">
@@ -23,7 +27,14 @@ const Header = () => {
                 <LogoutBtn />
             </div>
             <div className="md:hidden">
-                <FaBars className="text-xl cursor-pointer" />
+                {
+                    isOpen ? (
+                        <RxCross2 onClick={() => { setisOpen(false) }} className="text-3xl cursor-pointer" />
+                    ) : (
+                        <FaBars onClick={() => { setisOpen(true) }} className="text-xl cursor-pointer" />
+                    )
+                }
+
             </div>
         </header>
     )

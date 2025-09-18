@@ -1,24 +1,49 @@
 'use client'
 
+import Loading from "@/app/componnent/Loading";
+import useLoadingStore from "@/store/useLoadingStore";
+import MakePost from "@/utilis/requestrespose/post";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 
 const SignUP = () => {
 
+
+    const router = useRouter();
+    const { isLoading, setLoading } = useLoadingStore();
     const [name, setname] = useState('');
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setrole] = useState('Artist');
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log("Email:", email, "Password:", password);
+
+        if (name && email && password) {
+
+            setLoading(true);
+            const res = await MakePost('api/register',);
+            setLoading(false);
+
+            if (res) {
+                router.push('/signin');
+            } else {
+                alert("There was a Server Side Problem");
+            }
+
+        } else {
+            alert("All Feilds is Required!");
+        }
+
     };
+
 
 
     return (
         <div className="w-screen h-screen flex items-center justify-center">
+            {isLoading && <Loading />}
             <div className="bg-white p-6 rounded-lg shadow-md w-80 text-center border">
                 <h2 className="text-xl font-bold mb-4">Sign UP</h2>
 

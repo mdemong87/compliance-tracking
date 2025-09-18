@@ -1,19 +1,27 @@
 'use client'
 
 import Loading from "@/app/componnent/Loading";
+import useLoadingStore from "@/store/useLoadingStore";
 import Link from "next/link";
 import { useState } from "react";
 
 const SignIn = () => {
 
+    const { isLoading, setisLoading } = useLoadingStore();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setrole] = useState('Artist');
-    const [isLoading, setisLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
+
+
+        const formdata = {
+            email,
+            password
+        }
+
         console.log("Email:", email, "Password:", password);
     };
 
