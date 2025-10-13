@@ -27,10 +27,10 @@ export default async function middleware(req) {
     const decoded = token ? await verifyJWT(token) : null;
 
 
-    // will be added is array ['/deshboard', '/pubs', , '/clock', '/shift', '/comparison', '/upload', '/add']
+
 
     // Protected routes
-    const protectedRoutes = ['/sdf'];
+    const protectedRoutes = ['/deshboard', '/pubs', , '/clock', '/shift', '/comparison', '/upload', '/add'];
     const isProtected = protectedRoutes.some(route => path.startsWith(route));
 
 
