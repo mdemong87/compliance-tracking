@@ -17,7 +17,7 @@ const Asidebar = () => {
         {[
           {
             name: "Deshboard",
-            link: '/'
+            link: '/deshboard'
           },
           {
             name: "Pubs Compliance",
@@ -34,7 +34,16 @@ const Asidebar = () => {
           {
             name: "Compliance Comparison",
             link: '/comparison'
-          }
+          },
+          {
+            name: "Upload Pubs",
+            link: '/upload'
+          },
+          {
+            name: "Add User",
+            link: '/add'
+          },
+
 
         ].map((item, i) => (
           <Link

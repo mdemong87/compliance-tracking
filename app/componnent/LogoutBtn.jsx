@@ -8,6 +8,7 @@ const LogoutBtn = () => {
     const router = useRouter();
 
     function handleLogout() {
+        localStorage.clear();
         router.push('/signin');
     }
 

@@ -2,16 +2,21 @@
 
 import Loading from "@/app/componnent/Loading";
 import useLoadingStore from "@/store/useLoadingStore";
+import setCookie from "@/utilis/cookie/setcookie";
+import MakePost from "@/utilis/requestrespose/post";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const SignIn = () => {
 
-    const { isLoading, setisLoading } = useLoadingStore();
 
+    const { isLoading, setLoading } = useLoadingStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setrole] = useState('Artist');
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,13 +27,32 @@ const SignIn = () => {
             password
         }
 
-        console.log("Email:", email, "Password:", password);
+        setLoading(true);
+        const res = await MakePost('api/login', formdata);
+        console.log(res);
+        setLoading(false);
+
+        if (res) {
+
+            setCookie('token', res?.token);
+            setCookie('name', res?.name);
+            setCookie('email', res?.email);
+            setCookie('role', res?.role);
+            setCookie('id', res?.id);
+            router.push('/deshboard');
+
+
+        } else {
+            toast.error("There was a Server Side Problem");
+        }
+
     };
 
 
     return (
         <div className="w-screen h-screen flex items-center justify-center">
             {isLoading && <Loading />}
+            <ToastContainer />
             <div className="bg-white p-6 rounded-lg shadow-md w-80 text-center border">
                 <h2 className="text-xl font-bold mb-4">Sign IN</h2>
 

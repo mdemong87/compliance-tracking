@@ -1,99 +1,83 @@
-import { jwtVerify } from 'jose';
-import { NextResponse } from 'next/server';
+import { jwtVerify } from "jose";
+import { NextResponse } from "next/server";
 
-
-/***************  Specify protected routes *******************/
-const protectedRoutes = ['/admin', '/hr', '/projectmanager', '/employee', '/attendance', '/calendar', '/profile', '/holidays', '/leave', '/announcement']
-
-
-
-
-/************** Verify the jwt token function *************/
 async function verifyJWT(token) {
     try {
-        const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET); // make sure you set this
-        const { payload } = await jwtVerify(token, secret);
-        return payload; // valid token → return payload
+        const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
+        const { payload } = await jwtVerify(token, secret, {
+            clockTolerance: 30 // allow 30 seconds difference
+        });
+        return payload;
     } catch (err) {
-        console.log(err);
-        return null; // invalid or expired
+        console.log("JWT Error:", err);
+        return null;
     }
 }
-
 
 
 
 export default async function middleware(req) {
 
-
-    /********** Check if the current route is protected or public *********/
     const path = req.nextUrl.pathname;
-    const isProtectedRoute = protectedRoutes.includes(path);
+    const token = req.cookies.get("token")?.value;
+    const role = req.cookies.get("role")?.value;
 
 
-    /************ Get cookie from request **********/
-    const token = req.cookies.get('token')?.value;
-    const role = req.cookies.get('role')?.value;
+    // Check token validity
+    const decoded = token ? await verifyJWT(token) : null;
+
+
+    // will be added is array ['/deshboard', '/pubs', , '/clock', '/shift', '/comparison', '/upload', '/add']
+
+    // Protected routes
+    const protectedRoutes = ['/sdf'];
+    const isProtected = protectedRoutes.some(route => path.startsWith(route));
 
 
 
-    /************* if have token the check the validity  ************/
-    let decoded = null;
-    if (token) {
-        decoded = await verifyJWT(token);
+    // If not logged in but trying to access protected routes
+    if (!decoded && isProtected) {
+
+        const res = NextResponse.redirect(new URL("/signin", req.nextUrl));
+        return res;
     }
 
 
-    /************* Check if the user not log in but access protected route *************/
-    if (isProtectedRoute && !decoded) {
-        const response = NextResponse.redirect(new URL('/signin', req.nextUrl));
-        return response;
+
+    if (!decoded) {
+
+        // AFTER
+        const res = NextResponse.next();
+
+        ["id", "role", "token", "name", "email"].forEach((cookieName) => {
+            res.cookies.set(cookieName, "", { path: "/", maxAge: 0 });
+        });
+
+        return res;
     }
 
 
-    /************* Check if path starts with any of the given prefixes *************/
-    const startsWithProtectedPrefix = ['/admin', '/hr', '/projectmanager', '/employee',]
-        .some(prefix => path.startsWith(prefix));
 
 
-
-    /************* if user is not login but try to access protect routes and the route start with protected route then redirect to the signin page ************/
-    if (!decoded && startsWithProtectedPrefix) {
-        return NextResponse.redirect(new URL('/signin', req.nextUrl));
-    }
-
-    /*************************** handly check if the user access other role dashboard then redirect to the signin page *******************************/
-    if (role != "Admin" && path.startsWith('/admin')) {
-        return NextResponse.redirect(new URL('/signin', req.nextUrl));
-    } else if (role != "Hr" && path.startsWith('/hr')) {
-        return NextResponse.redirect(new URL('/signin', req.nextUrl));
-    } else if (role != "Project Manager" && path.startsWith('/projectmanager')) {
-        return NextResponse.redirect(new URL('/signin', req.nextUrl));
-    } else if (role != "Employee" && path.startsWith('/employee')) {
-        return NextResponse.redirect(new URL('/signin', req.nextUrl));
-    }
-
-    /*************************** if the user in login but hit the signin page the redirect to the deshboard pagte *******************************/
-    if (decoded && role && path.startsWith('/signin')) {
-        if (role === 'Admin') {
-            return NextResponse.redirect(new URL('/admin', req.nextUrl));
-        } else if (role === 'Hr') {
-            return NextResponse.redirect(new URL('/hr', req.nextUrl));
-        } else if (role === 'Project Manager') {
-            return NextResponse.redirect(new URL('/projectmanager', req.nextUrl));
-        } else if (role === 'Employee') {
-            return NextResponse.redirect(new URL('/employee', req.nextUrl));
-        }
+    // Role-based access
+    if (decoded && role) {
+        if (role !== "Admin" && path.startsWith("/deshboard/admin")) return NextResponse.redirect(new URL("/signin", req.nextUrl));
     }
 
 
-    /************* final next call *************/
+
+    // If logged in but trying to visit signin page
+    if (decoded && path.startsWith("/signin")) {
+        const redirects = {
+            "Admin": "/deshboard/admin",
+            "Customer": "/application",
+        };
+        if (role && redirects[role]) return NextResponse.redirect(new URL(redirects[role], req.nextUrl));
+    }
+
     return NextResponse.next();
-
 }
 
-
-/**************** Routes Middleware should not run on *****************/
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-}
+    matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+};

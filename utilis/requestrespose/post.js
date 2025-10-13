@@ -8,6 +8,9 @@ const MakePost = async (endpoint, data) => {
             body: JSON.stringify(data),
         });
 
+
+        console.log(response);
+
         if (!response.ok) {
             console.error(`Request failed with status: ${response.status}`);
             return false;
