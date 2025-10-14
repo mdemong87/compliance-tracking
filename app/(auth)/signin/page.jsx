@@ -39,7 +39,13 @@ const SignIn = () => {
             setCookie('email', res?.email);
             setCookie('role', res?.role);
             setCookie('id', res?.id);
-            router.push('/deshboard');
+
+
+            toast.success("Login Successfull");
+
+            setTimeout(() => {
+                router.push('/deshboard');
+            }, 1000);
 
 
         } else {
