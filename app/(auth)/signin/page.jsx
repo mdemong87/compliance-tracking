@@ -44,7 +44,7 @@ const SignIn = () => {
             toast.success("Login Successfull");
 
             setTimeout(() => {
-                router.push('/');
+                router.push('/deshboard');
             }, 1000);
 
 
