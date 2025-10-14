@@ -1,5 +1,6 @@
 'use client'
 
+import setCookie from "@/utilis/cookie/setcookie";
 import { useRouter } from "next/navigation";
 
 
@@ -8,7 +9,14 @@ const LogoutBtn = () => {
     const router = useRouter();
 
     function handleLogout() {
-        localStorage.clear();
+
+
+        setCookie('token', '');
+        setCookie('name', '');
+        setCookie('email', '');
+        setCookie('role', '');
+        setCookie('id', '');
+
         router.push('/signin');
     }
 
